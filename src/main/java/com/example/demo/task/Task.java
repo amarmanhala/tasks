@@ -1,8 +1,21 @@
 package com.example.demo.task;
 
 import java.time.LocalDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
+import jakarta.persistence.Entity;
+import jakarta.persistence.SequenceGenerator;
 
+@Entity
+@Table
 public class Task {
+    @Id
+    @SequenceGenerator(
+      name = "task_sequence",
+      sequenceName = "task_sequence",
+      allocationSize = 1
+    )
+
   private Long id;
   private String name;
   private String description;
@@ -10,6 +23,8 @@ public class Task {
   private String status;
 
   public Task(Long id, String name, String description, LocalDate created_on, String status) {
+    
+
     this.id = id;
     this.name = name;
     this.description = description;
