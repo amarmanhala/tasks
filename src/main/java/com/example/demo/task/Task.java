@@ -1,12 +1,14 @@
 package com.example.demo.task;
 
 import java.time.LocalDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 
-@Entity
+@Entity // used to map java class to table in db.
 @Table
 public class Task {
     @Id
@@ -14,6 +16,10 @@ public class Task {
       name = "task_sequence",
       sequenceName = "task_sequence",
       allocationSize = 1
+    )
+    @GeneratedValue(
+      strategy = GenerationType.SEQUENCE,
+      generator ="task_sequence"
     )
 
   private Long id;
