@@ -2,8 +2,13 @@ package com.example.demo.categories;
 
 import java.util.Date;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity //Marks class as entity
 public class Categories {
 
+  @Id //Marks as PRIMARY KEY
   private Long id;
   private String name;
   private String description;
@@ -14,22 +19,6 @@ public class Categories {
 
   public Categories(Long id, String name) {
     this.id = id;
-    this.name = name;
-  }
-
-  public Categories(Long id, String name, String description, String imageUrl, boolean isActive, Date createdAt,
-      Date updatedAt) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.imageUrl = imageUrl;
-    this.isActive = isActive;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-
-  }
-
-  public Categories(String name) {
     this.name = name;
   }
 
