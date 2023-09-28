@@ -29,22 +29,22 @@ public class CategoriesService {
     return categoriesList.stream().filter(c -> c.getId().equals(id)).findFirst().get();
   }
 
-  
-
   public void addCategories(@RequestBody Categories categories) {
-
-    categoriesRepository.findAll();
+    boolean studentExists = categoriesRepository.existsByName("Testing Ama");
+    if (studentExists) {
+    } else {
+      categoriesRepository.save(categories);
+    }
   }
 
   public boolean findCategoryByName() {
     boolean studentExists = categoriesRepository.existsByName("Testing Ama");
-    if(studentExists) {
+    if (studentExists) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
-}
+  }
 
   public void updateCategory(Categories categories, Long id) {
     for (Categories i : categoriesList) {
@@ -55,11 +55,7 @@ public class CategoriesService {
   }
 
   public void deleteCategory(Categories categories, Long id) {
-    for (Categories i : categoriesList) {
-      if (i.getId() == id) {
-        i.setname("Deleted");
-      }
-    }
+    categoriesRepository.deleteById(id);
   }
 
 }
