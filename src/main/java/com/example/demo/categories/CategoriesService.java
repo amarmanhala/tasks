@@ -32,10 +32,19 @@ public class CategoriesService {
   
 
   public void addCategories(@RequestBody Categories categories) {
-    categoriesRepository.findCategoryByName(categories.getname());
-    if()
+
     categoriesRepository.findAll();
   }
+
+  public boolean findCategoryByName() {
+    boolean studentExists = categoriesRepository.existsByName("Testing Ama");
+    if(studentExists) {
+      return true;
+    }
+    else {
+      return false;
+    }
+}
 
   public void updateCategory(Categories categories, Long id) {
     for (Categories i : categoriesList) {

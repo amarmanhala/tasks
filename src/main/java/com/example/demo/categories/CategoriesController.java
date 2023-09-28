@@ -44,5 +44,10 @@ public class CategoriesController {
   public int countCategories() {
 return 1;  }
 
+@RequestMapping("/categories/byname")
+ public boolean getCategoriesByName() {
+  return categoriesService.findCategoryByName();
+  }
+
 
 }
