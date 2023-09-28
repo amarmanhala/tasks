@@ -3,6 +3,8 @@ package com.example.demo.categories;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,25 +31,33 @@ public class CategoriesController {
   public void addCategories(@RequestBody Categories categories) {
     categoriesService.addCategories(categories);
   }
-  
+
   @RequestMapping(method = RequestMethod.PUT, value = "/categories/{id}")
-  public void updateCategory(@RequestBody Categories categories, @PathVariable Long id) {
-    categoriesService.updateCategory(categories, id);
+  public ResponseEntity<Categories> updateCategory(@RequestBody Categories categories, @PathVariable Long id) {
+
+    ResponseEntity<Categories> responseEntity = categoriesService.updateCategory(categories, id);
+    if (responseEntity.getStatusCode() == HttpStatus.OK) {
+      return ResponseEntity.ok(responseEntity.getBody()); // Forward the 200 OK response with the updated product
+  } else {
+      return ResponseEntity.status(responseEntity.getStatusCode()).build(); // Return the received status code (e.g., 404)
+  }
   }
 
   @RequestMapping(method = RequestMethod.DELETE, value = "/categories/{id}")
-  public void deleteCategory(@RequestBody Categories categories, @PathVariable Long id) {
-    categoriesService.deleteCategory(categories, id);
+  public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+    boolean isDeleted = categoriesService.deleteCategory(id);
+    if (isDeleted) {
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Successful deletion
+    } else {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Resource not found
+    }
   }
 
   @RequestMapping("/categories/count")
   public int countCategories() {
-return 1;  }
-
-@RequestMapping("/categories/byname")
- public boolean getCategoriesByName() {
-  return categoriesService.findCategoryByName();
+    return 1;
   }
 
+  
 
 }
