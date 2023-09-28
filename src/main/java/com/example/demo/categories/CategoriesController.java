@@ -28,8 +28,14 @@ public class CategoriesController {
   }
 
   @RequestMapping(method = RequestMethod.POST, value = "/categories")
-  public void addCategories(@RequestBody Categories categories) {
-    categoriesService.addCategories(categories);
+  public ResponseEntity<Categories> addCategories(@RequestBody Categories categories) {
+    ResponseEntity<Categories> responsePOST = categoriesService.addCategories(categories);
+     if (responsePOST.getStatusCode() == HttpStatus.OK) {
+      return ResponseEntity.ok(responsePOST.getBody()); // Forward the 200 OK response with the updated product
+    } else {
+      return ResponseEntity.status(responsePOST.getStatusCode()).build(); // Return the received status code (e.g.,
+                                                                            // 404)
+    }
   }
 
   @RequestMapping(method = RequestMethod.PUT, value = "/categories/{id}")
