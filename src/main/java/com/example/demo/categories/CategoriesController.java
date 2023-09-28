@@ -1,14 +1,13 @@
 package com.example.demo.categories;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,42 +26,29 @@ public class CategoriesController {
     return categoriesService.getCategoryById(id);
   }
 
-  @RequestMapping(method = RequestMethod.POST, value = "/categories")
+  @PostMapping("/categories")
   public ResponseEntity<Categories> addCategories(@RequestBody Categories categories) {
-    ResponseEntity<Categories> responsePOST = categoriesService.addCategories(categories);
-     if (responsePOST.getStatusCode() == HttpStatus.OK) {
-      return ResponseEntity.ok(responsePOST.getBody()); // Forward the 200 OK response with the updated product
-    } else {
-      return ResponseEntity.status(responsePOST.getStatusCode()).build(); // Return the received status code (e.g.,
-                                                                            // 404)
-    }
+    ResponseEntity<Categories> responseEntity = categoriesService.addCategories(categories);
+
+    // You can directly return the response from the service method
+    return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
   }
 
-  @RequestMapping(method = RequestMethod.PUT, value = "/categories/{id}")
+  @PutMapping("/categories/{id}")
   public ResponseEntity<Categories> updateCategory(@RequestBody Categories categories, @PathVariable Long id) {
 
     ResponseEntity<Categories> responseEntity = categoriesService.updateCategory(categories, id);
-    if (responseEntity.getStatusCode() == HttpStatus.OK) {
-      return ResponseEntity.ok(responseEntity.getBody()); // Forward the 200 OK response with the updated product
-    } else {
-      return ResponseEntity.status(responseEntity.getStatusCode()).build(); // Return the received status code (e.g.,
-                                                                            // 404)
-    }
+    return responseEntity;
+
   }
 
-  @RequestMapping(method = RequestMethod.DELETE, value = "/categories/{id}")
+  @DeleteMapping("/categories/{id}")
   public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
     boolean isDeleted = categoriesService.deleteCategory(id);
-    if (isDeleted) {
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Successful deletion
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Resource not found
-    }
-  }
-
-  @RequestMapping("/categories/count")
-  public int countCategories() {
-    return 1;
+    // Use ternary operator for concise ResponseEntity creation
+    return isDeleted
+        ? ResponseEntity.noContent().build() // Successful deletion
+        : ResponseEntity.notFound().build(); // Resource not found
   }
 
 }

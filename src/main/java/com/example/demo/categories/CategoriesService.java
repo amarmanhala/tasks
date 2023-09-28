@@ -39,18 +39,21 @@ public class CategoriesService {
 
   public ResponseEntity<Categories> updateCategory(Categories categories, Long id) {
     // Check if the resource with the given ID exists
-    Optional<Categories> existingCategory = categoriesRepository.findById(id);
-    if (existingCategory.isPresent()) {
-      Categories categoryToBeUpdated = existingCategory.get();
-      // Update the product with the new data
-      categoryToBeUpdated.setname(categories.getname());
-      categoryToBeUpdated.setDescription(categories.getDescription());
-      categoryToBeUpdated.setImageUrl(categoryToBeUpdated.getImageUrl());
-      categoryToBeUpdated.setIsActive(categoryToBeUpdated.getIsActive());
-      // Save the updated product to the database
-      Categories savedCategory = categoriesRepository.save(categoryToBeUpdated);
+    Optional<Categories> existingCategoryOptional = categoriesRepository.findById(id);
 
-      return ResponseEntity.ok(savedCategory); // Return the updated product with a 200 OK response
+    if (existingCategoryOptional.isPresent()) {
+      Categories existingCategory = existingCategoryOptional.get();
+
+      // Update the fields with the new data
+      existingCategory.setname(categories.getname());
+      existingCategory.setDescription(categories.getDescription());
+      existingCategory.setImageUrl(categories.getImageUrl());
+      existingCategory.setIsActive(categories.getIsActive()); // Update isActive field
+
+      // Save the updated category to the database
+      Categories updatedCategory = categoriesRepository.save(existingCategory);
+
+      return ResponseEntity.ok(updatedCategory); // Return the updated category with a 200 OK response
     } else {
       return ResponseEntity.notFound().build(); // 404 Not Found if the resource doesn't exist
     }
