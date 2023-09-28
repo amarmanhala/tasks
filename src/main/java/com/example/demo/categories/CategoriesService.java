@@ -1,4 +1,5 @@
 package com.example.demo.categories;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -59,12 +60,12 @@ public class CategoriesService {
     // Check if the category exists
     if (!categoriesRepository.existsById(id)) {
       return false;
-    }
-    // Perform the DELETE operation
-    categoriesRepository.deleteById(id);
+    } else {
+      categoriesRepository.deleteById(id);
+      return true;
 
-    // Return a 204 No Content response
-    return true;
+    }
+
   }
 
 }
