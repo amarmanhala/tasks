@@ -38,9 +38,10 @@ public class CategoriesController {
     ResponseEntity<Categories> responseEntity = categoriesService.updateCategory(categories, id);
     if (responseEntity.getStatusCode() == HttpStatus.OK) {
       return ResponseEntity.ok(responseEntity.getBody()); // Forward the 200 OK response with the updated product
-  } else {
-      return ResponseEntity.status(responseEntity.getStatusCode()).build(); // Return the received status code (e.g., 404)
-  }
+    } else {
+      return ResponseEntity.status(responseEntity.getStatusCode()).build(); // Return the received status code (e.g.,
+                                                                            // 404)
+    }
   }
 
   @RequestMapping(method = RequestMethod.DELETE, value = "/categories/{id}")
@@ -57,7 +58,5 @@ public class CategoriesController {
   public int countCategories() {
     return 1;
   }
-
-  
 
 }

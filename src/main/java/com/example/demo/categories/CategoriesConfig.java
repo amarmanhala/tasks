@@ -12,14 +12,11 @@ public class CategoriesConfig {
   @Bean
   CommandLineRunner commandLineRunner(CategoriesRepository categoriesRepository) {
     return args -> {
-      Categories marvin = new Categories(1L, "Testing Marvin");
-      Categories alex = new Categories(2L, "Testing ALex");
-      Categories amar = new Categories(3L, "Testing Amar");
-      Categories simar = new Categories(4L, "Testing Simar");
+      Categories marvin = new Categories("Testing Marvi","fefefe","dwdedede", true);
+      
 
 
-
-      categoriesRepository.saveAll(List.of(marvin, alex, amar, simar));
+      categoriesRepository.saveAll(List.of(marvin));
 
     };
   }

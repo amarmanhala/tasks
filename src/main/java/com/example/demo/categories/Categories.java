@@ -5,31 +5,28 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 
-@Entity //Marks class as entity
+@Entity // Marks class as entity
 public class Categories {
 
-  @Id //Marks as PRIMARY KEY
+  @Id // Marks as PRIMARY KEY
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
   private String description;
   private String imageUrl;
   private boolean isActive;
-  private Date createdAt;
-  private Date updatedAt;
+  private Date createdAt = new Date();
+  private Date updatedAt = new Date();
 
   public Categories() {
-    
   }
-
-  public Categories(Long id, String name) {
-    this.id = id;
+  // Constructor with all attributes
+  public Categories(String name, String description, String imageUrl, boolean isActive) {
     this.name = name;
-  }
-  public Categories(String name) {
-    this.name = name;
+    this.description = description;
+    this.imageUrl = imageUrl;
+    this.isActive = isActive;
   }
 
   public Long getId() {
@@ -64,28 +61,21 @@ public class Categories {
     this.imageUrl = imageUrl;
   }
 
-  public boolean isActive() {
+  public boolean getIsActive() {
     return isActive;
   }
 
-  public void setActive(boolean active) {
-    isActive = active;
+  public void setIsActive(boolean isActive) {
+    this.isActive = isActive;
   }
 
-  public Date getCreatedAt() {
-    return createdAt;
+  public void setCreatedAt() {
+    this.createdAt = new Date();
   }
 
-  public void setCreatedAt(Date createdAt) {
-    this.createdAt = createdAt;
+  public void setUpdatedAt() {
+    this.updatedAt = new Date();
   }
 
-  public Date getUpdatedAt() {
-    return updatedAt;
-  }
-
-  public void setUpdatedAt(Date updatedAt) {
-    this.updatedAt = updatedAt;
-  }
 
 }

@@ -18,9 +18,6 @@ public class CategoriesService {
   @Autowired
   public CategoriesService(CategoriesRepository categoriesRepository) {
     this.categoriesRepository = categoriesRepository;
-    this.categoriesList.add(new Categories(1L, "Shirts"));
-    this.categoriesList.add(new Categories(2L, "Pants"));
-    this.categoriesList.add(new Categories(3L, "Jackets"));
 
   }
 
