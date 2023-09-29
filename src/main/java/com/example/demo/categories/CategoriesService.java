@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,8 +22,16 @@ public class CategoriesService {
     return categoriesRepository.findAll();
   }
 
-  public Categories getCategoryById(Long id) {
-    return categoriesList.stream().filter(c -> c.getId().equals(id)).findFirst().get();
+  public Optional<Categories> getCategoryById(Long id) {
+
+    // Check if the category exists
+    if (categoriesRepository.existsById(id)) {
+      Optional<Categories> existingCategoryOptional = categoriesRepository.findById(id);
+      return existingCategoryOptional; // Return the updated category
+    } else {
+
+      return Optional.empty();
+    }
   }
 
   public ResponseEntity<Categories> addCategories(@RequestBody Categories categories) {
@@ -42,21 +49,20 @@ public class CategoriesService {
     Optional<Categories> existingCategoryOptional = categoriesRepository.findById(id);
 
     if (existingCategoryOptional.isPresent()) {
-        Categories existingCategory = existingCategoryOptional.get();
+      Categories existingCategory = existingCategoryOptional.get();
 
-        existingCategory.setname(categories.getname());
-        existingCategory.setDescription(categories.getDescription());
-        existingCategory.setImageUrl(categories.getImageUrl());
-        existingCategory.setIsActive(categories.getIsActive());
+      existingCategory.setname(categories.getname());
+      existingCategory.setDescription(categories.getDescription());
+      existingCategory.setImageUrl(categories.getImageUrl());
+      existingCategory.setIsActive(categories.getIsActive());
 
-        Categories updatedCategory = categoriesRepository.save(existingCategory);
+      Categories updatedCategory = categoriesRepository.save(existingCategory);
 
-        return Optional.of(updatedCategory); // Return the updated category
+      return Optional.of(updatedCategory); // Return the updated category
     } else {
-        return Optional.empty(); // Indicate that the category was not found
+      return Optional.empty(); // Indicate that the category was not found
     }
-}
-
+  }
 
   public boolean deleteCategory(Long id) {
     // Check if the category exists
