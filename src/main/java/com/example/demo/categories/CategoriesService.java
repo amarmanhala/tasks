@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,27 +38,25 @@ public class CategoriesService {
     }
   }
 
-  public ResponseEntity<Categories> updateCategory(Categories categories, Long id) {
-    // Check if the resource with the given ID exists
+  public Optional<Categories> updateCategory(Categories categories, Long id) {
     Optional<Categories> existingCategoryOptional = categoriesRepository.findById(id);
 
     if (existingCategoryOptional.isPresent()) {
-      Categories existingCategory = existingCategoryOptional.get();
+        Categories existingCategory = existingCategoryOptional.get();
 
-      // Update the fields with the new data
-      existingCategory.setname(categories.getname());
-      existingCategory.setDescription(categories.getDescription());
-      existingCategory.setImageUrl(categories.getImageUrl());
-      existingCategory.setIsActive(categories.getIsActive()); // Update isActive field
+        existingCategory.setname(categories.getname());
+        existingCategory.setDescription(categories.getDescription());
+        existingCategory.setImageUrl(categories.getImageUrl());
+        existingCategory.setIsActive(categories.getIsActive());
 
-      // Save the updated category to the database
-      Categories updatedCategory = categoriesRepository.save(existingCategory);
+        Categories updatedCategory = categoriesRepository.save(existingCategory);
 
-      return ResponseEntity.ok(updatedCategory); // Return the updated category with a 200 OK response
+        return Optional.of(updatedCategory); // Return the updated category
     } else {
-      return ResponseEntity.notFound().build(); // 404 Not Found if the resource doesn't exist
+        return Optional.empty(); // Indicate that the category was not found
     }
-  }
+}
+
 
   public boolean deleteCategory(Long id) {
     // Check if the category exists
@@ -66,7 +65,6 @@ public class CategoriesService {
     } else {
       categoriesRepository.deleteById(id);
       return true;
-
     }
 
   }

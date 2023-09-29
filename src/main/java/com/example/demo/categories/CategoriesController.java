@@ -1,6 +1,10 @@
 package com.example.demo.categories;
+
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,12 +39,17 @@ public class CategoriesController {
   }
 
   @PutMapping("/categories/{id}")
-  public ResponseEntity<Categories> updateCategory(@RequestBody Categories categories, @PathVariable Long id) {
+  public ResponseEntity<?> updateCategory(@RequestBody Categories categories, @PathVariable Long id) {
+    Optional<Categories> updatedCategoryOptional = categoriesService.updateCategory(categories, id);
 
-    ResponseEntity<Categories> responseEntity = categoriesService.updateCategory(categories, id);
-    return responseEntity;
-
-  }
+    if (updatedCategoryOptional.isPresent()) {
+        Categories updatedCategory = updatedCategoryOptional.get();
+        return ResponseEntity.ok(updatedCategory); // 200 OK with the updated category
+    } else {
+        return ResponseEntity.notFound().build(); // 404 Not Found when category not found
+    }
+}
+    
 
   @DeleteMapping("/categories/{id}")
   public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
